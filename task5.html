@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Слайдер изображений</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+      .slider {
+        position: relative;
+        width: 400px;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .slides {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+      }
+      .img-container {
+        min-width: 400px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .img-container img {
+        width: 50%;
+      }
+      .buttons {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+      }
+      .buttons button {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 18px;
+      }
+      .indicator {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slider">
+      <div class="slides">
+        <div class="img-container">
+          <img
+            src="https://twigo.ru/center/iblock/76e/77okinp2uayjfvj20yq313k6qqfx63ex/iphone_11_b_2.jpg"
+            alt="1"
+          />
+        </div>
+        <div class="img-container">
+          <img
+            src="https://media.graphassets.com/resize=fit:clip,height:940,width:940/Q0LsFhetT8uwFNPH9RR3"
+            alt="2"
+          />
+        </div>
+        <div class="img-container">
+          <img
+            src="https://ishopmsk.ru/image/cache/catalog/Add/series%207/147187_p_27-max-700.png"
+            alt="3"
+          />
+        </div>
+      </div>
+      <div class="buttons">
+        <button id="prev">❮</button>
+        <button id="next">❯</button>
+      </div>
+      <div class="indicator" id="indicator">Изображение 1 из 3</div>
+    </div>
+
+    <script>
+      // селекторы, чтобы управлять элементами DOM
+      const slides = document.querySelector(".slides");
+      const images = document.querySelectorAll(".slides img");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      const indicator = document.getElementById("indicator");
+
+      // переменная для текущего изображения
+      let index = 0;
+      const total = images.length;
+
+      // функция, которая меняет стили, перемещая картинки влева-вправо
+      function updateSlider() {
+        slides.style.transform = `translateX(${-index * 400}px)`;
+        indicator.textContent = `Изображение ${index + 1} из ${total}`;
+      }
+
+      // обработчик для нажатия кнопки вправо
+      nextBtn.addEventListener("click", () => {
+        index = (index + 1) % total;
+        updateSlider();
+      });
+
+      // обработчик для нажатия кнопки влево
+      prevBtn.addEventListener("click", () => {
+        index = (index - 1 + total) % total;
+        updateSlider();
+      });
+
+      // устанавливаем интервал, чтобы слайды перелистывались автоматически
+      const autoSlide = setInterval(() => {
+        index = (index + 1) % total;
+        updateSlider();
+      }, 3000);
+
+      // обработчики для свайпов
+      let startX;
+      slider.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+      });
+      slider.addEventListener("touchend", (e) => {
+        let endX = e.changedTouches[0].clientX;
+        if (startX > endX + 50) nextSlide();
+        if (startX < endX - 50) prevSlide();
+      });
+    </script>
+  </body>
+</html>

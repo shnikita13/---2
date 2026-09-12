@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Книжный магазин</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+        <h1>Онлайн-библиотека и Книжный магазин</h1>
+        <div id="role-selector">
+            <span>Режим работы: </span>
+            <button id="btnRoleUser" class="active" onclick="switchRole('user')">Пользователь</button>
+            <button id="btnRoleAdmin" onclick="switchRole('admin')">Администратор</button>
+        </div>
+    </header>
+
+    <!-- ИНТЕРФЕЙС ПОЛЬЗОВАТЕЛЯ -->
+    <main id="user-interface">
+        <section class="controls">
+            <h2>Каталог книг</h2>
+            <div class="filters">
+                <label>
+                    Категория:
+                    <select id="filter-category" onchange="renderUserBooks()">
+                        <option value="">Все категории</option>
+                    </select>
+                </label>
+                <label>
+                    Автор:
+                    <select id="filter-author" onchange="renderUserBooks()">
+                        <option value="">Все авторы</option>
+                    </select>
+                </label>
+                <label>
+                    Сортировка по году:
+                    <select id="sort-year" onchange="renderUserBooks()">
+                        <option value="desc">Сначала новые</option>
+                        <option value="asc">Сначала старые</option>
+                    </select>
+                </label>
+            </div>
+        </section>
+
+        <section id="user-books-grid" class="books-grid"></section>
+
+        <!-- Модальное окно покупки/аренды -->
+        <div id="modal-action" class="modal" style="display:none;">
+            <div class="modal-content">
+                <h3 id="modal-book-title">Оформление книги</h3>
+                <p id="modal-book-info"></p>
+                
+                <label>Ваше имя:
+                    <input type="text" id="user-name-input" placeholder="Введите ваше имя" />
+                </label>
+
+                <div class="action-type-group">
+                    <label><input type="radio" name="actionType" value="buy" checked onchange="toggleRentalOptions()" /> Покупка</label>
+                    <label><input type="radio" name="actionType" value="rent" onchange="toggleRentalOptions()" /> Аренда</label>
+                </div>
+
+                <div id="rental-options" style="display:none; margin-top:10px;">
+                    <label>Срок аренды:
+                        <select id="rent-period">
+                            <option value="2weeks">2 недели</option>
+                            <option value="1month">1 месяц</option>
+                            <option value="3months">3 месяца</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button onclick="confirmTransaction()">Подтвердить</button>
+                    <button onclick="closeModal()">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ИНТЕРФЕЙС АДМИНИСТРАТОРА -->
+    <main id="admin-interface" style="display:none;">
+        <h2>Панель администратора</h2>
+        
+        <section class="admin-section">
+            <h3>Добавить / Редактировать книгу</h3>
+            <form id="book-form" onsubmit="saveBook(event)">
+                <input type="hidden" id="admin-book-id" />
+                <input type="text" id="admin-title" placeholder="Название книги" required />
+                <input type="text" id="admin-author" placeholder="Автор" required />
+                <input type="text" id="admin-category" placeholder="Категория" required />
+                <input type="number" id="admin-year" placeholder="Год издания" required />
+                <input type="number" id="admin-price" placeholder="Цена (руб.)" required />
+                <label>
+                    Статус доступности:
+                    <select id="admin-status">
+                        <option value="available">В наличии</option>
+                        <option value="out_of_stock">Нет в наличии</option>
+                    </select>
+                </label>
+                <button type="submit">Сохранить книгу</button>
+                <button type="button" onclick="resetAdminForm()">Очистить форму</button>
+            </form>
+        </section>
+
+        <section class="admin-section">
+            <h3>Управление каталогом книг</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Категория</th>
+                        <th>Год</th>
+                        <th>Цена</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-books-table"></tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h3>Активные аренды и Авто-напоминания</h3>
+            <button onclick="checkRentalNotifications()">Запустить автоматическую проверку просрочек</button>
+            <div id="notifications-log" class="log-box"></div>
+            <table class="admin-table" style="margin-top:10px;">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Книга</th>
+                        <th>Дата начала</th>
+                        <th>Срок окончания</th>
+                        <th>Статус</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-rentals-table"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

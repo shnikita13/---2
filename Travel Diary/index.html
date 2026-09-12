@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дневник путешествий</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+        <h1>🌍 Дневник путешествий</h1>
+        <div id="auth-panel">
+            <span id="user-display"></span>
+            <button id="btn-login" onclick="showAuthModal('login')">Войти</button>
+            <button id="btn-register" onclick="showAuthModal('register')">Регистрация</button>
+            <button id="btn-logout" style="display:none;" onclick="logout()">Выйти</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="top-bar">
+            <button id="btn-add-trip" onclick="openTripModal()" style="display:none;">+ Добавить путешествие</button>
+            <div class="tabs">
+                <button id="tab-all" class="active" onclick="switchTab('all')">Все путешествия</button>
+                <button id="tab-my" onclick="switchTab('my')" style="display:none;">Мои записи</button>
+            </div>
+        </div>
+
+        <section id="trips-grid" class="trips-grid"></section>
+    </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
+    <div id="modal-auth" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3 id="auth-title">Вход</h3>
+            <input type="text" id="auth-username" placeholder="Имя пользователя" />
+            <input type="password" id="auth-password" placeholder="Пароль" />
+            <div class="modal-buttons">
+                <button onclick="handleAuth()">Продолжить</button>
+                <button onclick="closeAuthModal()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ЗАПИСИ -->
+    <div id="modal-trip" class="modal" style="display:none;">
+        <div class="modal-content modal-wide">
+            <h3>Новое путешествие</h3>
+            <form id="trip-form" onsubmit="saveTrip(event)">
+                <input type="text" id="trip-title" placeholder="Название поездки (например: Поездка в Сочи)" required />
+                <input type="text" id="trip-location" placeholder="Местоположение / Геопозиция (например: Сочи, 43.585, 39.720)" required />
+                <input type="url" id="trip-image" placeholder="Ссылка на изображение (URL)" required />
+                <input type="number" id="trip-cost" placeholder="Стоимость (руб.)" required />
+                
+                <textarea id="trip-sights" placeholder="Места культурного наследия и посещения (через запятую)" required></textarea>
+                
+                <div class="ratings-group">
+                    <h4>Оценка условий (от 1 до 5):</h4>
+                    <label>Безопасность: <input type="number" id="rate-safety" min="1" max="5" value="5" required /></label>
+                    <label>Удобство передвижения: <input type="number" id="rate-transport" min="1" max="5" value="5" required /></label>
+                    <label>Растительность / Природа: <input type="number" id="rate-nature" min="1" max="5" value="5" required /></label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="submit">Сохранить</button>
+                    <button type="button" onclick="closeTripModal()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
